@@ -1,0 +1,92 @@
+{
+  "info": {
+    "_postman_id": "300b7485-3718-45ee-b2c1-b24714ebb33c",
+    "name": "ReqRes API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58860589",
+    "_collection_link": "https://go.postman.co/collection/58860589-300b7485-3718-45ee-b2c1-b24714ebb33c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get User 2",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"User id is 2\", function () {\r\n    const body = pm.response.json();\r\n    pm.expect(body.data.id).to.eql(2);\r\n});\r\n\r\npm.test(\"Email is on reqres.in\", function () {\r\n    const body = pm.response.json();\r\n    pm.expect(body.data.email).to.include(\"@reqres.in\");\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/users/2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "users",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Name and job are echoed back\", function () {\r\n    const body = pm.response.json();\r\n    pm.expect(body.name).to.eql(\"Kishan\");\r\n    pm.expect(body.job).to.eql(\"API Automation Specialist\");\r\n});\r\n\r\npm.test(\"Response has an id\", function () {\r\n    const body = pm.response.json();\r\n    pm.expect(body).to.have.property(\"id\");\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Kishan\",\r\n    \"job\": \"API Automation Specialist\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/users",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{api_key}}",
+        "type": "string"
+      }
+    ]
+  }
+}
