@@ -1,5 +1,5 @@
 # API Test Automation
-
+![CI](https://github.com/kishankumar-qa/api-test-automation/actions/workflows/ci.yml/badge.svg)
 API test automation with Python (requests + pytest) and Postman/Newman, run against the [ReqRes](https://reqres.in) test API.
 
 ## What's inside
