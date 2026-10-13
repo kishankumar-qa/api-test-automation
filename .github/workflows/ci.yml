@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  pytest:
+  tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,10 +16,22 @@ jobs:
           python-version: "3.14"
           cache: pip
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: pip install -r requirements.txt
 
       - name: Run pytest
         env:
           REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
         run: pytest -v
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run Postman collection with Newman
+        env:
+          REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
+        run: newman run postman/reqres-collection.json --env-var "base_url=https://reqres.in/api" --env-var "api_key=$REQRES_API_KEY"
