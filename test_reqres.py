@@ -3,9 +3,38 @@ import os
 import pytest
 import requests
 
+from jsonschema import validate
+
 BASE_URL = "https://reqres.in/api"
 
+USER_SCHEMA = {
+    "type": "object",
+    "required": ["data"],
+    "properties": {
+        "data": {
+            "type": "object",
+            "required": ["id", "email", "first_name", "last_name", "avatar"],
+            "properties": {
+                "id": {"type": "integer"},
+                "email": {"type": "string"},
+                "first_name": {"type": "string"},
+                "last_name": {"type": "string"},
+                "avatar": {"type": "string"},
+            },
+        }
+    },
+}
 
+CREATED_USER_SCHEMA = {
+    "type": "object",
+    "required": ["name", "job", "id", "createdAt"],
+    "properties": {
+        "name": {"type": "string"},
+        "job": {"type": "string"},
+        "id": {"type": ["string", "integer"]},
+        "createdAt": {"type": "string"},
+    },
+}
 @pytest.fixture(scope="session")
 def api():
     """A requests Session that sends the API key on every call."""
@@ -64,3 +93,16 @@ def test_login_without_password_returns_400(api):
     )
     assert response.status_code == 400
     assert "error" in response.json()
+
+
+def test_get_user_matches_schema(api):
+    response = api.get(f"{BASE_URL}/users/2", timeout=10)
+    assert response.status_code == 200
+    validate(instance=response.json(), schema=USER_SCHEMA)
+
+
+def test_create_user_matches_schema(api):
+    payload = {"name": "Kishan", "job": "API Automation Specialist"}
+    response = api.post(f"{BASE_URL}/users", json=payload, timeout=10)
+    assert response.status_code == 201
+    validate(instance=response.json(), schema=CREATED_USER_SCHEMA)
