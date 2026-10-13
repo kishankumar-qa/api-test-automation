@@ -40,3 +40,27 @@ def test_create_user(api):
 def test_get_single_user_status(api, user_id, expected_status):
     response = api.get(f"{BASE_URL}/users/{user_id}", timeout=10)
     assert response.status_code == expected_status
+
+
+def test_update_user_put(api):
+    payload = {"name": "Kishan", "job": "Senior API Automation Specialist"}
+    response = api.put(f"{BASE_URL}/users/2", json=payload, timeout=10)
+    assert response.status_code == 200
+    body = response.json()
+    assert body["name"] == payload["name"]
+    assert body["job"] == payload["job"]
+    assert "updatedAt" in body
+
+
+def test_delete_user(api):
+    response = api.delete(f"{BASE_URL}/users/2", timeout=10)
+    assert response.status_code == 204
+    assert response.text == ""
+
+
+def test_login_without_password_returns_400(api):
+    response = api.post(
+        f"{BASE_URL}/login", json={"email": "eve.holt@reqres.in"}, timeout=10
+    )
+    assert response.status_code == 400
+    assert "error" in response.json()
