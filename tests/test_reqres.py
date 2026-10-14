@@ -1,7 +1,12 @@
+import json
+from pathlib import Path
+
 import pytest
 from jsonschema import validate
 
 BASE_URL = "https://reqres.in/api"
+
+DATA = json.loads((Path(__file__).parent / "data" / "users.json").read_text())
 
 USER_SCHEMA = {
     "type": "object",
@@ -42,7 +47,7 @@ def test_get_users_page_2(api):
 
 
 def test_create_user(api):
-    payload = {"name": "Kishan", "job": "API Automation Specialist"}
+    payload = DATA["new_user"]
     response = api.post(f"{BASE_URL}/users", json=payload, timeout=10)
     assert response.status_code == 201
     body = response.json()
@@ -51,14 +56,14 @@ def test_create_user(api):
     assert "id" in body
 
 
-@pytest.mark.parametrize("user_id, expected_status", [(2, 200), (5, 200), (23, 404)])
+@pytest.mark.parametrize("user_id, expected_status", DATA["single_user_cases"])
 def test_get_single_user_status(api, user_id, expected_status):
     response = api.get(f"{BASE_URL}/users/{user_id}", timeout=10)
     assert response.status_code == expected_status
 
 
 def test_update_user_put(api):
-    payload = {"name": "Kishan", "job": "Senior API Automation Specialist"}
+    payload = DATA["updated_user"]
     response = api.put(f"{BASE_URL}/users/2", json=payload, timeout=10)
     assert response.status_code == 200
     body = response.json()
@@ -75,7 +80,7 @@ def test_delete_user(api):
 
 def test_login_without_password_returns_400(api):
     response = api.post(
-        f"{BASE_URL}/login", json={"email": "eve.holt@reqres.in"}, timeout=10
+        f"{BASE_URL}/login", json=DATA["login_missing_password"], timeout=10
     )
     assert response.status_code == 400
     assert "error" in response.json()
@@ -88,7 +93,6 @@ def test_get_user_matches_schema(api):
 
 
 def test_create_user_matches_schema(api):
-    payload = {"name": "Kishan", "job": "API Automation Specialist"}
-    response = api.post(f"{BASE_URL}/users", json=payload, timeout=10)
+    response = api.post(f"{BASE_URL}/users", json=DATA["new_user"], timeout=10)
     assert response.status_code == 201
     validate(instance=response.json(), schema=CREATED_USER_SCHEMA)

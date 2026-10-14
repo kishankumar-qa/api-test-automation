@@ -7,6 +7,7 @@ API test automation with Python (requests + pytest) and Postman/Newman, run agai
 - `tests/test_reqres.py`: pytest suite covering GET, POST, PUT and DELETE, a negative case (400 on a bad login), parametrized status checks, and JSON schema validation
 - `tests/conftest.py`: shared `api` fixture, a requests session that sends the API key on every call
 - `postman/reqres-collection.json`: Postman collection (GET and POST requests with test scripts), runnable from the command line with Newman
+- `tests/data/users.json`: test inputs (payloads and parametrized cases) kept separate from the test code
 
 ## Setup
 
