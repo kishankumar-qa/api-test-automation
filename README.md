@@ -8,6 +8,7 @@ API test automation with Python (requests + pytest) and Postman/Newman, run agai
 - `tests/conftest.py`: shared `api` fixture, a requests session that sends the API key on every call
 - `postman/reqres-collection.json`: Postman collection (GET and POST requests with test scripts), runnable from the command line with Newman
 - `tests/data/users.json`: test inputs (payloads and parametrized cases) kept separate from the test code
+- `postman/users.csv`: data file that drives the Postman collection through Newman, one iteration per row
 
 ## Setup
 
@@ -35,7 +36,7 @@ pytest -v
 
 ```
 npm install -g newman
-newman run postman\reqres-collection.json --env-var "base_url=https://reqres.in/api" --env-var "api_key=%REQRES_API_KEY%"
+newman run postman\reqres-collection.json -d postman\users.csv --env-var "base_url=https://reqres.in/api" --env-var "api_key=%REQRES_API_KEY%"
 ```
 
 ## Known behaviour

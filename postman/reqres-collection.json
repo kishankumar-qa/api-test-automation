@@ -72,6 +72,35 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "Get User by ID (data-driven)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const expected = parseInt(pm.iterationData.get(\"expected_status\"), 10);\r\n\r\npm.test(`User ${pm.iterationData.get(\"user_id\")} returns ${expected}`, function () {\r\n    pm.response.to.have.status(expected);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/users/{{user_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "users",
+            "{{user_id}}"
+          ]
+        }
+      },
+      "response": []
     }
   ],
   "auth": {

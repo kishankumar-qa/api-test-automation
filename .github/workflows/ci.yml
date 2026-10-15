@@ -41,4 +41,4 @@ jobs:
       - name: Run Postman collection with Newman
         env:
           REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
-        run: newman run postman/reqres-collection.json --env-var "base_url=https://reqres.in/api" --env-var "api_key=$REQRES_API_KEY"
+        run: newman run postman/reqres-collection.json -d postman/users.csv --env-var "base_url=https://reqres.in/api" --env-var "api_key=$REQRES_API_KEY"
