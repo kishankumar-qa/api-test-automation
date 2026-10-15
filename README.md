@@ -37,3 +37,7 @@ pytest -v
 npm install -g newman
 newman run postman\reqres-collection.json --env-var "base_url=https://reqres.in/api" --env-var "api_key=%REQRES_API_KEY%"
 ```
+
+## Known behaviour
+
+ReqRes rejects an invalid API key on write requests (POST returns 403) but serves GET requests without a valid key. Two tests assert the stricter behaviour and are marked `xfail(strict=True)`, so they will alert me if the API changes.
