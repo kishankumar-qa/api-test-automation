@@ -10,6 +10,10 @@
     "login_missing_password": {
         "email": "eve.holt@reqres.in"
     },
+    "valid_login": {
+        "email": "eve.holt@reqres.in",
+        "password": "cityslicka"
+    },
     "single_user_cases": [
         [2, 200],
         [5, 200],

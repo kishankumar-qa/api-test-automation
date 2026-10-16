@@ -37,7 +37,7 @@ CREATED_USER_SCHEMA = {
     },
 }
 
-
+@pytest.mark.smoke
 def test_get_users_page_2(api):
     response = api.get(f"{BASE_URL}/users", params={"page": 2}, timeout=10)
     assert response.status_code == 200
@@ -45,7 +45,7 @@ def test_get_users_page_2(api):
     assert body["page"] == 2
     assert len(body["data"]) > 0
 
-
+@pytest.mark.smoke
 def test_create_user(api):
     payload = DATA["new_user"]
     response = api.post(f"{BASE_URL}/users", json=payload, timeout=10)

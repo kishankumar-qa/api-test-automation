@@ -2,7 +2,7 @@ import pytest
 import requests
 
 BASE_URL = "https://reqres.in/api"
-
+pytestmark = pytest.mark.negative
 
 def test_post_with_invalid_api_key_is_rejected():
     response = requests.post(
