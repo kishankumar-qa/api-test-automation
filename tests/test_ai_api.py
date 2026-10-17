@@ -1,8 +1,3 @@
-import subprocess
-import sys
-import time
-from pathlib import Path
-
 import pytest
 import requests
 from jsonschema import validate
@@ -11,7 +6,6 @@ pytestmark = pytest.mark.ai
 
 AI_URL = "http://127.0.0.1:8000/v1/chat"
 HEADERS = {"Authorization": "Bearer test-token"}
-SERVER = Path(__file__).parent.parent / "mock_ai" / "server.py"
 
 CHAT_SCHEMA = {
     "type": "object",
@@ -30,26 +24,6 @@ CHAT_SCHEMA = {
         },
     },
 }
-
-
-@pytest.fixture(scope="session")
-def ai_server():
-    """Start the local mock AI API for the test run, then stop it."""
-    process = subprocess.Popen([sys.executable, str(SERVER)])
-    for _ in range(50):
-        try:
-            requests.post(AI_URL, json={}, timeout=1)  # any response means it is up
-            break
-        except requests.exceptions.ConnectionError:
-            time.sleep(0.1)
-    else:
-        process.terminate()
-        pytest.fail("Mock AI server did not start")
-    yield
-    process.terminate()
-    process.wait()
-
-
 def chat(prompt, **extra):
     return requests.post(
         AI_URL, json={"prompt": prompt, **extra}, headers=HEADERS, timeout=10

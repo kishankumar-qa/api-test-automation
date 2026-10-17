@@ -1,6 +1,9 @@
 import json
 import logging
 import os
+import subprocess
+import sys
+import time
 from pathlib import Path
 
 import pytest
@@ -55,3 +58,24 @@ def auth_api(api, auth_token):
     session.hooks["response"].append(log_response)
     yield session
     session.close()
+
+SERVER = Path(__file__).parent.parent / "mock_ai" / "server.py"
+MOCK_URL = "http://127.0.0.1:8000"
+
+
+@pytest.fixture(scope="session")
+def ai_server():
+    """Start the local mock API for the test run, then stop it."""
+    process = subprocess.Popen([sys.executable, str(SERVER)])
+    for _ in range(50):
+        try:
+            requests.post(f"{MOCK_URL}/v1/chat", json={}, timeout=1)  # any response means it is up
+            break
+        except requests.exceptions.ConnectionError:
+            time.sleep(0.1)
+    else:
+        process.terminate()
+        pytest.fail("Mock server did not start")
+    yield
+    process.terminate()
+    process.wait()

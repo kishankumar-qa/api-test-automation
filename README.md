@@ -9,6 +9,7 @@ API test automation with Python (requests + pytest) and Postman/Newman, run agai
 - `postman/reqres-collection.json`: Postman collection (GET and POST requests with test scripts), runnable from the command line with Newman
 - `tests/data/users.json`: test inputs (payloads and parametrized cases) kept separate from the test code
 - `postman/users.csv`: data file that drives the Postman collection through Newman, one iteration per row
+- `mock_ai/server.py` and `tests/test_ai_api.py`: a local chat-style API that returns varying text, and tests that check structure, limits, timing and refusals instead of exact wording
 
 ## Setup
 
