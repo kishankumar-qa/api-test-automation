@@ -10,6 +10,7 @@ API test automation with Python (requests + pytest) and Postman/Newman, run agai
 - `tests/data/users.json`: test inputs (payloads and parametrized cases) kept separate from the test code
 - `postman/users.csv`: data file that drives the Postman collection through Newman, one iteration per row
 - `mock_ai/server.py` and `tests/test_ai_api.py`: a local chat-style API that returns varying text, and tests that check structure, limits, timing and refusals instead of exact wording
+- `tests/test_owasp.py`: checks mapped to five OWASP API Security Top 10 (2023) risks against a deliberately weak local mock. Known weaknesses are recorded as `xfail(strict=True)`
 
 ## Setup
 
